@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Github, Twitter, Mail } from "lucide-react";
+import { Sparkles, Github, Mail } from "lucide-react";
 
 export default function Footer() {
     return (
@@ -68,21 +68,16 @@ export default function Footer() {
                         <h3 className="font-semibold text-white mb-4">Connect</h3>
                         <div className="flex space-x-3">
                             <a
-                                href="#"
-                                className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all duration-200 hover:scale-110"
-                                aria-label="Twitter"
-                            >
-                                <Twitter className="h-5 w-5" />
-                            </a>
-                            <a
-                                href="#"
+                                href="https://github.com/Apex077"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all duration-200 hover:scale-110"
                                 aria-label="GitHub"
                             >
                                 <Github className="h-5 w-5" />
                             </a>
                             <a
-                                href="#"
+                                href="mailto:dharaneesh.panneerselvam7@gmail.com"
                                 className="p-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all duration-200 hover:scale-110"
                                 aria-label="Email"
                             >

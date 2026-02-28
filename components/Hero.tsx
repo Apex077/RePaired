@@ -163,33 +163,6 @@ export default function Hero({ firstName }: { firstName?: string | null }) {
                         </Link>
                     </div>
 
-                    {/* Stats */}
-                    <div className="grid grid-cols-3 gap-8 md:gap-16 pt-12 animate-fade-in delay-300">
-                        <div className="space-y-1">
-                            <div className="text-3xl md:text-4xl font-bold text-emerald-400">
-                                1,200+
-                            </div>
-                            <div className="text-sm text-slate-400">
-                                Successful Matches
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <div className="text-3xl md:text-4xl font-bold text-blue-400">
-                                500+
-                            </div>
-                            <div className="text-sm text-slate-400">
-                                Active Listings
-                            </div>
-                        </div>
-                        <div className="space-y-1">
-                            <div className="text-3xl md:text-4xl font-bold text-purple-400">
-                                95%
-                            </div>
-                            <div className="text-sm text-slate-400">
-                                Satisfaction Rate
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

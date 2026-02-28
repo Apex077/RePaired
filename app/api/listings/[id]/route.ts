@@ -1,8 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { Condition, ListingStatus } from "@prisma/client";
+import { z } from "zod";
 
 type Params = { params: Promise<{ id: string }> };
+
+const patchSchema = z.object({
+    status: z.nativeEnum(ListingStatus).optional(),
+    title: z.string().min(1).max(120).optional(),
+    description: z.string().max(1000).nullable().optional(),
+    condition: z.nativeEnum(Condition).optional(),
+    price: z.number().min(0).max(100_000).optional(),
+});
 
 /**
  * GET /api/listings/:id
@@ -52,6 +62,21 @@ export async function PATCH(request: Request, { params }: Params) {
 
     const { id } = await params;
 
+    let body: unknown;
+    try {
+        body = await request.json();
+    } catch {
+        return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
+    const parsed = patchSchema.safeParse(body);
+    if (!parsed.success) {
+        return NextResponse.json(
+            { error: "Invalid input", details: parsed.error.flatten().fieldErrors },
+            { status: 400 }
+        );
+    }
+
     try {
         const existing = await prisma.listing.findUnique({ where: { id } });
         if (!existing) {
@@ -61,17 +86,16 @@ export async function PATCH(request: Request, { params }: Params) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
-        const body = await request.json();
-        const { status, title, description, condition, price } = body;
+        const { status, title, description, condition, price } = parsed.data;
 
         const updated = await prisma.listing.update({
             where: { id },
             data: {
-                ...(status && { status }),
-                ...(title && { title }),
+                ...(status !== undefined && { status }),
+                ...(title !== undefined && { title }),
                 ...(description !== undefined && { description }),
-                ...(condition && { condition }),
-                ...(price !== undefined && { price: parseFloat(price) }),
+                ...(condition !== undefined && { condition }),
+                ...(price !== undefined && { price }),
             },
         });
 
@@ -81,6 +105,7 @@ export async function PATCH(request: Request, { params }: Params) {
         return NextResponse.json({ error: "Failed to update listing" }, { status: 500 });
     }
 }
+
 
 /**
  * DELETE /api/listings/:id

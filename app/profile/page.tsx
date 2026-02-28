@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { User, Settings, Package, LogOut, Mail, ShieldCheck, MapPin, Trophy } from "lucide-react";
+import TakeDownButton from "@/components/TakeDownButton";
 
 function getInitials(name: string | null): string {
     if (!name) return "?";
@@ -258,24 +259,27 @@ export default async function ProfilePage() {
                                 {user.listings.map((listing) => (
                                     <li
                                         key={listing.id}
-                                        className="flex items-center justify-between p-3 rounded-lg border border-border hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all duration-200 gap-4"
+                                        className={`flex items-center justify-between p-3 rounded-lg border border-border hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all duration-200 gap-3`}
                                     >
-                                        <div className="min-w-0">
+                                        <div className="min-w-0 flex-1">
                                             <p className="font-medium text-sm truncate">{listing.title}</p>
                                             <p className="text-xs text-muted-foreground">
                                                 {listing.product} · {listing.type} · {listing.condition}
                                             </p>
                                         </div>
-                                        <span
-                                            className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${listing.status === "AVAILABLE"
-                                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                                : listing.status === "REPAIRED"
-                                                    ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
-                                                    : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
-                                                }`}
-                                        >
-                                            {listing.status}
-                                        </span>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            <span
+                                                className={`text-xs px-2 py-1 rounded-full font-medium ${listing.status === "AVAILABLE"
+                                                        ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                                        : listing.status === "REPAIRED"
+                                                            ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                                            : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
+                                                    }`}
+                                            >
+                                                {listing.status}
+                                            </span>
+                                            <TakeDownButton listingId={listing.id} />
+                                        </div>
                                     </li>
                                 ))}
                             </ul>

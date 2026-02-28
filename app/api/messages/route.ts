@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { z } from "zod";
+
+const messagePostSchema = z.object({
+    listingId: z.string().min(1),
+    receiverId: z.string().min(1),
+    content: z.string().min(1, "Message cannot be empty").max(2000, "Message too long (max 2000 chars)"),
+});
 
 /**
  * GET /api/messages?listingId=<id>
@@ -59,23 +66,39 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    let body: unknown;
     try {
-        const body = await request.json();
-        const { listingId, receiverId, content } = body;
+        body = await request.json();
+    } catch {
+        return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
 
-        if (!listingId || !receiverId || !content?.trim()) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-        }
+    const parsed = messagePostSchema.safeParse(body);
+    if (!parsed.success) {
+        return NextResponse.json(
+            { error: "Invalid input", details: parsed.error.flatten().fieldErrors },
+            { status: 400 }
+        );
+    }
 
-        // Prevent messaging yourself
-        if (receiverId === session.user.id) {
-            return NextResponse.json({ error: "Cannot send message to yourself" }, { status: 400 });
-        }
+    const { listingId, receiverId, content } = parsed.data;
 
+    // Prevent messaging yourself
+    if (receiverId === session.user.id) {
+        return NextResponse.json({ error: "Cannot send a message to yourself" }, { status: 400 });
+    }
+
+    try {
         // Verify listing exists
         const listing = await prisma.listing.findUnique({ where: { id: listingId } });
         if (!listing) {
             return NextResponse.json({ error: "Listing not found" }, { status: 404 });
+        }
+
+        // Verify receiver is a real user
+        const receiver = await prisma.user.findUnique({ where: { id: receiverId } });
+        if (!receiver) {
+            return NextResponse.json({ error: "Recipient not found" }, { status: 404 });
         }
 
         const message = await prisma.message.create({

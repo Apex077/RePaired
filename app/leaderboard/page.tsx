@@ -66,21 +66,21 @@ export default async function LeaderboardPage() {
             ring: "ring-amber-400/60",
             badge: "bg-amber-400 text-slate-900",
             label: "🥇",
-            height: "h-36",
+            height: "h-16 md:h-36",
         },
         2: {
             bg: "from-slate-400/20 to-slate-500/10",
             ring: "ring-slate-400/60",
             badge: "bg-slate-300 text-slate-900",
             label: "🥈",
-            height: "h-28",
+            height: "h-12 md:h-28",
         },
         3: {
             bg: "from-orange-600/20 to-orange-700/10",
             ring: "ring-orange-500/60",
             badge: "bg-orange-400 text-slate-900",
             label: "🥉",
-            height: "h-24",
+            height: "h-8 md:h-24",
         },
     };
 
@@ -169,7 +169,7 @@ export default async function LeaderboardPage() {
                                             <span className="text-xl font-bold text-white">{user.score}</span>
                                             <span className="text-xs text-slate-400">pts</span>
                                         </div>
-                                        <div className={`w-full ${style.height} rounded-lg bg-slate-800/60 border border-slate-700/40 hidden sm:block`} />
+                                        <div className={`w-full ${style.height} rounded-lg bg-slate-800/60 border border-slate-700/40`} />
                                     </div>
                                 );
                             })}

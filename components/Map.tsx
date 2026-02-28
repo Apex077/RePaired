@@ -50,11 +50,11 @@ export interface MapPin {
 
 // ─── Default mock pins ─────────────────────────────────────────────────────────
 const DEFAULT_PINS: MapPin[] = [
-    { id: 1, pos: [51.505, -0.09], title: "AirPods Pro Left Bud", type: "BUD", price: 0, condition: "Good", distance: "2.3 mi" },
-    { id: 2, pos: [51.51, -0.1], title: "Sony WF-1000XM4 Case", type: "CASE", price: 12, condition: "Like New", distance: "3.8 mi" },
-    { id: 3, pos: [51.51, -0.12], title: "Pixel Buds Pro Right Bud", type: "BUD", price: 0, condition: "Fair", distance: "5.1 mi" },
-    { id: 4, pos: [51.503, -0.095], title: "Galaxy Buds 2 Case", type: "CASE", price: 0, condition: "Good", distance: "1.2 mi" },
-    { id: 5, pos: [51.498, -0.085], title: "AirPods 3 Left Bud", type: "BUD", price: 8, condition: "Good", distance: "4.0 mi" },
+    { id: 1, pos: [12.7558, 80.2021], title: "AirPods Pro Left Bud", type: "BUD", price: 0, condition: "Good", distance: "0.6 km" },
+    { id: 2, pos: [12.7490, 80.1953], title: "Sony WF-1000XM4 Case", type: "CASE", price: 12, condition: "Like New", distance: "1.1 km" },
+    { id: 3, pos: [12.7601, 80.1942], title: "Pixel Buds Pro Right Bud", type: "BUD", price: 0, condition: "Fair", distance: "1.8 km" },
+    { id: 4, pos: [12.7511, 80.2038], title: "Galaxy Buds 2 Case", type: "CASE", price: 0, condition: "Good", distance: "0.9 km" },
+    { id: 5, pos: [12.7469, 80.2004], title: "AirPods 3 Left Bud", type: "BUD", price: 8, condition: "Good", distance: "1.4 km" },
 ];
 
 interface MapProps {
@@ -64,7 +64,7 @@ interface MapProps {
     userLocation?: [number, number] | null;
 }
 
-export default function Map({ pins = DEFAULT_PINS, center = [20.5937, 78.9629], zoom = 13, userLocation }: MapProps) {
+export default function Map({ pins = DEFAULT_PINS, center = [12.7524, 80.1987], zoom = 14, userLocation }: MapProps) {
     return (
 
         <MapContainer

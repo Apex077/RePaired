@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useMemo, useEffect, useState } from "react";
 import type { MapPin } from "@/components/Map";
 
-const DEFAULT_CENTER: [number, number] = [20.5937, 78.9629]; // India fallback
+const DEFAULT_CENTER: [number, number] = [12.7524, 80.1987]; // Sholinganallur, Chennai
 
 interface MapMapProps {
     pins?: MapPin[];

@@ -82,8 +82,8 @@ export default function ListingForm() {
                     condition: formData.condition,
                     side: formData.side || null,
                     // TODO: Replace with real coordinates from browser geolocation or a map picker
-                    latitude: 51.505,
-                    longitude: -0.09,
+                    latitude: 12.7524,
+                    longitude: 80.1987,
                 }),
             });
 

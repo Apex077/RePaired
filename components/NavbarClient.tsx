@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Sparkles, LogOut } from "lucide-react";
+import { Menu, X, Sparkles, LogOut, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +63,15 @@ export default function NavbarClient({ user, signOutAction }: NavbarClientProps)
                         >
                             Profile
                         </Link>
+                        {user && (
+                            <Link
+                                href="/leaderboard"
+                                className="flex items-center gap-1.5 text-sm font-medium text-slate-300 hover:text-amber-400 transition-colors duration-200"
+                            >
+                                <Trophy className="h-4 w-4" />
+                                Leaderboard
+                            </Link>
+                        )}
                     </div>
 
                     {/* Auth Area */}
@@ -154,6 +163,16 @@ export default function NavbarClient({ user, signOutAction }: NavbarClientProps)
                         >
                             Profile
                         </Link>
+                        {user && (
+                            <Link
+                                href="/leaderboard"
+                                className="px-4 py-2 text-sm font-medium text-slate-300 hover:bg-amber-500/10 hover:text-amber-400 rounded-lg transition-all duration-200 flex items-center gap-2"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <Trophy className="h-4 w-4" />
+                                Leaderboard
+                            </Link>
+                        )}
 
                         {user ? (
                             <div className="px-4 pt-2 border-t border-slate-800 space-y-3">

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { User, Settings, Package, LogOut, Mail, ShieldCheck, MapPin } from "lucide-react";
+import { User, Settings, Package, LogOut, Mail, ShieldCheck, MapPin, Trophy } from "lucide-react";
 
 function getInitials(name: string | null): string {
     if (!name) return "?";
@@ -27,6 +27,7 @@ export default async function ProfilePage() {
             name: true,
             email: true,
             image: true,
+            points: true,
             listings: {
                 orderBy: { createdAt: "desc" },
                 select: {
@@ -47,6 +48,24 @@ export default async function ProfilePage() {
     const initials = getInitials(user.name);
     const availableCount = user.listings.filter((l) => l.status === "AVAILABLE").length;
     const repairedCount = user.listings.filter((l) => l.status === "REPAIRED").length;
+    const computedScore = user.listings.length * 10 + repairedCount * 25 + user.points;
+
+    // Compute leaderboard rank (all users)
+    const allUsers = await prisma.user.findMany({
+        select: {
+            id: true,
+            points: true,
+            listings: { select: { status: true } },
+        },
+    });
+    const userRank =
+        allUsers
+            .map((u) => ({
+                id: u.id,
+                score: u.points + u.listings.length * 10 + u.listings.filter((l) => l.status === "REPAIRED").length * 25,
+            }))
+            .sort((a, b) => b.score - a.score)
+            .findIndex((u) => u.id === user.id) + 1;
 
     return (
         <div className="container py-10 px-4 md:px-6 mx-auto max-w-5xl">
@@ -92,8 +111,7 @@ export default async function ProfilePage() {
                         </span>
                     </div>
 
-                    {/* Stats card */}
-                    <div className="bg-card border rounded-xl p-4 grid grid-cols-3 divide-x divide-border text-center">
+                    <div className="bg-card border rounded-xl p-4 grid grid-cols-4 divide-x divide-border text-center">
                         <div className="px-2">
                             <div className="text-xl font-bold text-emerald-400">{user.listings.length}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Listings</div>
@@ -106,6 +124,10 @@ export default async function ProfilePage() {
                             <div className="text-xl font-bold text-purple-400">{repairedCount}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Matched</div>
                         </div>
+                        <div className="px-2">
+                            <div className="text-xl font-bold text-amber-400">{computedScore}</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">Pts</div>
+                        </div>
                     </div>
 
                     {/* Navigation */}
@@ -116,6 +138,14 @@ export default async function ProfilePage() {
                         <Button variant="ghost" className="w-full justify-start" asChild>
                             <Link href="/donate">
                                 <Package className="mr-2 h-4 w-4" /> My Listings
+                            </Link>
+                        </Button>
+                        <Button variant="ghost" className="w-full justify-start" asChild>
+                            <Link href="/leaderboard" className="flex items-center">
+                                <Trophy className="mr-2 h-4 w-4 text-amber-400" /> Leaderboard
+                                {userRank > 0 && (
+                                    <span className="ml-auto text-xs text-amber-400 font-bold">#{userRank}</span>
+                                )}
                             </Link>
                         </Button>
                         <Button variant="ghost" className="w-full justify-start">
@@ -225,10 +255,10 @@ export default async function ProfilePage() {
                                         </div>
                                         <span
                                             className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${listing.status === "AVAILABLE"
-                                                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                                    : listing.status === "REPAIRED"
-                                                        ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
-                                                        : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
+                                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                                : listing.status === "REPAIRED"
+                                                    ? "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                                    : "bg-slate-500/10 text-slate-400 border border-slate-500/20"
                                                 }`}
                                         >
                                             {listing.status}
@@ -273,15 +303,17 @@ export default async function ProfilePage() {
                                     <p className="text-xs text-muted-foreground">Chat with other users</p>
                                 </div>
                             </Link>
-                            <div className="group flex items-center gap-3 p-4 rounded-lg border border-border opacity-50 cursor-not-allowed">
-                                <div className="h-10 w-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 shrink-0">
-                                    <Settings className="h-5 w-5" />
+                            <Link href="/leaderboard" className="group flex items-center gap-3 p-4 rounded-lg border border-border hover:border-amber-500/40 hover:bg-amber-500/5 transition-all duration-200">
+                                <div className="h-10 w-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400 group-hover:bg-amber-500/20 transition-colors shrink-0">
+                                    <Trophy className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-sm">Settings</p>
-                                    <p className="text-xs text-muted-foreground">Coming soon</p>
+                                    <p className="font-medium text-sm">Leaderboard</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {userRank > 0 ? `You are ranked #${userRank}` : "See who is leading"}
+                                    </p>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                     </div>
 

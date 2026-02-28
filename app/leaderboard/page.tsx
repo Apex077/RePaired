@@ -120,7 +120,7 @@ export default async function LeaderboardPage() {
                         <Zap className="h-4 w-4 text-emerald-400" />
                         How points are earned
                     </h2>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                         <div className="flex items-center gap-2 text-slate-400">
                             <span className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-xs shrink-0">+10</span>
                             Per listing created
@@ -135,7 +135,7 @@ export default async function LeaderboardPage() {
                 {/* Podium */}
                 {top3.length > 0 && (
                     <div className="mb-8">
-                        <div className="flex items-end justify-center gap-4">
+                        <div className="flex items-end justify-center gap-2 md:gap-4">
                             {podiumOrder.map((user) => {
                                 const rank = ranked.indexOf(user) + 1;
                                 const style = rankStyles[rank];
@@ -143,10 +143,10 @@ export default async function LeaderboardPage() {
                                 return (
                                     <div
                                         key={user.id}
-                                        className={`flex-1 max-w-[160px] flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-b ${style.bg} border ${isCurrentUser ? "border-emerald-500/40" : "border-slate-700/60"} transition-all`}
+                                        className={`flex-1 max-w-[120px] md:max-w-[160px] flex flex-col items-center gap-2 p-3 md:p-4 rounded-xl bg-gradient-to-b ${style.bg} border ${isCurrentUser ? "border-emerald-500/40" : "border-slate-700/60"} transition-all`}
                                     >
                                         <div className="text-2xl">{style.label}</div>
-                                        <div className={`relative h-14 w-14 rounded-full overflow-hidden ring-2 ${style.ring} shadow-lg`}>
+                                        <div className={`relative h-12 w-12 md:h-14 md:w-14 rounded-full overflow-hidden ring-2 ${style.ring} shadow-lg`}>
                                             {user.image ? (
                                                 <Image
                                                     src={user.image}
@@ -161,7 +161,7 @@ export default async function LeaderboardPage() {
                                                 </div>
                                             )}
                                         </div>
-                                        <p className={`font-semibold text-sm text-center truncate w-full ${isCurrentUser ? "text-emerald-400" : "text-white"}`}>
+                                        <p className={`font-semibold text-xs md:text-sm text-center truncate w-full ${isCurrentUser ? "text-emerald-400" : "text-white"}`}>
                                             {user.name?.split(" ")[0] ?? "Anonymous"}
                                             {isCurrentUser && " (You)"}
                                         </p>
@@ -169,7 +169,7 @@ export default async function LeaderboardPage() {
                                             <span className="text-xl font-bold text-white">{user.score}</span>
                                             <span className="text-xs text-slate-400">pts</span>
                                         </div>
-                                        <div className={`w-full ${style.height} rounded-lg bg-slate-800/60 border border-slate-700/40`} />
+                                        <div className={`w-full ${style.height} rounded-lg bg-slate-800/60 border border-slate-700/40 hidden sm:block`} />
                                     </div>
                                 );
                             })}

@@ -68,8 +68,8 @@ export default async function ProfilePage() {
             .findIndex((u) => u.id === user.id) + 1;
 
     return (
-        <div className="container py-10 px-4 md:px-6 mx-auto max-w-5xl">
-            <div className="flex flex-col md:flex-row gap-6">
+        <div className="container py-6 px-4 md:py-10 md:px-6 mx-auto max-w-5xl">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
 
                 {/* ── Sidebar ── */}
                 <div className="w-full md:w-72 shrink-0 space-y-4">
@@ -111,20 +111,21 @@ export default async function ProfilePage() {
                         </span>
                     </div>
 
-                    <div className="bg-card border rounded-xl p-4 grid grid-cols-4 divide-x divide-border text-center">
-                        <div className="px-2">
+                    {/* Stats card — 2×2 on mobile, 4-col on md+ */}
+                    <div className="bg-card border rounded-xl p-4 grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border text-center">
+                        <div className="px-2 py-2 md:py-0">
                             <div className="text-xl font-bold text-emerald-400">{user.listings.length}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Listings</div>
                         </div>
-                        <div className="px-2">
+                        <div className="px-2 py-2 md:py-0">
                             <div className="text-xl font-bold text-blue-400">{availableCount}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Active</div>
                         </div>
-                        <div className="px-2">
+                        <div className="px-2 py-2 md:py-0">
                             <div className="text-xl font-bold text-purple-400">{repairedCount}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Matched</div>
                         </div>
-                        <div className="px-2">
+                        <div className="px-2 py-2 md:py-0">
                             <div className="text-xl font-bold text-amber-400">{computedScore}</div>
                             <div className="text-xs text-muted-foreground mt-0.5">Pts</div>
                         </div>

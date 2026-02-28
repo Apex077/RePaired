@@ -100,7 +100,7 @@ export default function ListingForm() {
     };
 
     return (
-        <div className="w-full max-w-lg mx-auto bg-card rounded-xl shadow-sm border p-6 md:p-8">
+        <div className="w-full max-w-lg mx-auto bg-card rounded-xl shadow-sm border p-4 md:p-8">
             <div className="mb-8">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">Create Listing</h2>
@@ -220,7 +220,7 @@ export default function ListingForm() {
                     >
                         <h3 className="text-lg font-medium">Add a photo</h3>
                         <div
-                            className="border-2 border-dashed border-input rounded-xl p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-secondary/50 transition-colors"
+                            className="border-2 border-dashed border-input rounded-xl p-6 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-secondary/50 transition-colors"
                             onDragOver={handleDragOver}
                             onDrop={handleDrop}
                             onClick={() => {

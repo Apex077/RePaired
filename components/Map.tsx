@@ -1,13 +1,12 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 // ─── Custom branded marker (emerald glow pin) ─────────────────────────────────
 const createCustomIcon = (type: "BUD" | "CASE" = "BUD") => {
     const color = type === "CASE" ? "#3b82f6" : "#10b981";
-    const glow = type === "CASE" ? "rgba(59,130,246,0.4)" : "rgba(16,185,129,0.4)";
     const svgMarker = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 42" width="32" height="42">
       <defs>
@@ -62,10 +61,12 @@ interface MapProps {
     pins?: MapPin[];
     center?: [number, number];
     zoom?: number;
+    userLocation?: [number, number] | null;
 }
 
-export default function Map({ pins = DEFAULT_PINS, center = [51.505, -0.09], zoom = 13 }: MapProps) {
+export default function Map({ pins = DEFAULT_PINS, center = [20.5937, 78.9629], zoom = 13, userLocation }: MapProps) {
     return (
+
         <MapContainer
             center={center}
             zoom={zoom}
@@ -80,6 +81,41 @@ export default function Map({ pins = DEFAULT_PINS, center = [51.505, -0.09], zoo
                 subdomains="abcd"
                 maxZoom={20}
             />
+
+            {/* Geolocation — "You are here" circles (position provided by parent) */}
+            {userLocation && (
+                <>
+                    {/* Outer pulsing ring */}
+                    <Circle
+                        center={userLocation}
+                        radius={80}
+                        pathOptions={{
+                            color: "#3b82f6",
+                            fillColor: "#3b82f6",
+                            fillOpacity: 0.12,
+                            weight: 1.5,
+                            opacity: 0.5,
+                        }}
+                    />
+                    {/* Inner solid dot */}
+                    <Circle
+                        center={userLocation}
+                        radius={18}
+                        pathOptions={{
+                            color: "#ffffff",
+                            fillColor: "#3b82f6",
+                            fillOpacity: 1,
+                            weight: 3,
+                        }}
+                    >
+                        <Popup className="repaired-popup" closeButton={false} minWidth={140}>
+                            <div className="popup-card">
+                                <p className="popup-title" style={{ margin: 0 }}>📍 You are here</p>
+                            </div>
+                        </Popup>
+                    </Circle>
+                </>
+            )}
 
             {pins.map((pin) => (
                 <Marker
